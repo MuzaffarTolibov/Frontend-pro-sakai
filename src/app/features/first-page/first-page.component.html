@@ -39,4 +39,5 @@
 <app-test
     [showCreateModal]="isShowCreateDialog()"
     (close)="isShowCreateDialog.set(false)"
+    (create)="addUserToTable($event)"
 ></app-test>

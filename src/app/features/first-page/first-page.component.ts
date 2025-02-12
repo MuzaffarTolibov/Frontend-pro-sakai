@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { Toolbar } from 'primeng/toolbar';
+import { IUser } from '../test/model/user.model';
 
 interface ITableData {
     id: number;
@@ -74,6 +75,12 @@ export class FirstPageComponent {
 
     showCreateDialog() {
         this.isShowCreateDialog.set(true);
+    }
+
+    addUserToTable(event: IUser) {
+        this.isShowCreateDialog.set(false);
+
+        this.dataSource.push(event);
     }
 }
 
