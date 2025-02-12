@@ -1,0 +1,45 @@
+<p-dialog [(visible)]="showCreateModal" [style]="{ width: '450px' }" header="Добавить нового пользователя" [modal]="true" (onHide)="hideModal()">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <div>
+                <label for="firstName" class="block font-bold mb-3">Имя</label>
+                <input type="text" pInputText id="firstName" autofocus fluid />
+<!--                <small class="text-red-500">Name is required.</small>-->
+            </div>
+            <div>
+                <label for="lastName" class="block font-bold mb-3">Фамилия</label>
+                <input type="text" pInputText id="lastName" autofocus fluid />
+<!--                <small class="text-red-500">Name is required.</small>-->
+            </div>
+            <div>
+                <label for="patronymicName" class="block font-bold mb-3">Отчество</label>
+                <input type="text" pInputText id="patronymicName" autofocus fluid />
+<!--                <small class="text-red-500">Name is required.</small>-->
+            </div>
+            <div>
+                <label for="address" class="block font-bold mb-3">Адрес</label>
+                <input type="text" pInputText id="address" autofocus fluid />
+<!--                <small class="text-red-500">Name is required.</small>-->
+            </div>
+            <div>
+                <label for="phone" class="block font-bold mb-3">Номер телефона</label>
+                <input type="text" pInputText id="phone" autofocus fluid />
+<!--                <small class="text-red-500">Name is required.</small>-->
+            </div>
+<!--            <div>-->
+<!--                <label for="description" class="block font-bold mb-3">Description</label>-->
+<!--                <textarea id="description" pTextarea required rows="3" cols="20" fluid></textarea>-->
+<!--            </div>-->
+
+<!--            <div>-->
+<!--                <label class="block font-bold mb-3">Inventory Status</label>-->
+<!--                <p-select inputId="inventoryStatus" optionLabel="label" optionValue="label" placeholder="Select a Status" fluid />-->
+<!--            </div>-->
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text />
+        <p-button label="Save" icon="pi pi-check" />
+    </ng-template>
+</p-dialog>
