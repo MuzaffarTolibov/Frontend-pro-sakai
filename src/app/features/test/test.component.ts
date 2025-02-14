@@ -42,8 +42,15 @@ export class TestComponent {
     constructor() {
     }
 
+    @Input() set userItem(item: IUser) {
+        if (item) {
+            this.form.patchValue(item);
+        }
+    }
+
     hideModal(): void {
         this.close.emit(false);
+        this.form.reset();
     }
 
     saveUser() {
@@ -55,6 +62,12 @@ export class TestComponent {
         value.id = id;
 
         this.create.emit(value);
+        let localData: IUser[] = JSON.parse(localStorage.getItem('dataSource') as string);
+        localData.push(value);
+
+        localStorage.setItem('dataSource', JSON.stringify(localData));
+
+        this.form.reset();
     }
 
 }

@@ -31,6 +31,7 @@ interface ITableData {
 })
 export class FirstPageComponent {
     isShowCreateDialog: WritableSignal<boolean> = signal(false);
+    test: string = 'testszdvdfvsfvdfbvdfvdf'
     dataSource: ITableData[] = [
         {
             id: 1,
@@ -60,7 +61,9 @@ export class FirstPageComponent {
             phone: '+992929040255262'
         },
     ];
+    currentItem: IUser;
     cols = [
+        {field: 'action', header: 'Действие'},
         {field: 'id', header: '№'},
         {field: 'firstName', header: 'Имя'},
         {field: 'lastName', header: 'Фамилия'},
@@ -71,6 +74,7 @@ export class FirstPageComponent {
     ];
 
     constructor() {
+       this.dataSource = JSON.parse(localStorage.getItem('dataSource') as string);
     }
 
     showCreateDialog() {
@@ -81,6 +85,17 @@ export class FirstPageComponent {
         this.isShowCreateDialog.set(false);
 
         this.dataSource.push(event);
+    }
+
+    showEditModal(student: IUser) {
+        this.isShowCreateDialog.set(true);
+
+        this.currentItem = student;
+    }
+
+    closeModal(): void {
+        this.isShowCreateDialog.set(false);
+        this.currentItem = null;
     }
 }
 

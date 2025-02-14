@@ -24,6 +24,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-student>
             <tr>
+                <td style="min-width:2rem; text-align: center;">
+                    <p-button icon="pi pi-pencil" severity="success" rounded (click)="showEditModal(student)" />
+                </td>
                 <td style="min-width:2rem; text-align: center;"> {{ student.id }}</td>
                 <td style="min-width:12rem;">{{ student.firstName }}</td>
                 <td style="min-width:12rem;">{{ student.lastName }}</td>
@@ -38,6 +41,7 @@
 
 <app-test
     [showCreateModal]="isShowCreateDialog()"
-    (close)="isShowCreateDialog.set(false)"
+    [userItem]="currentItem"
+    (close)="closeModal()"
     (create)="addUserToTable($event)"
 ></app-test>
