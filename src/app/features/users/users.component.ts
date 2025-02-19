@@ -17,4 +17,16 @@ import { TableModule } from 'primeng/table';
 })
 export class UsersComponent {
     dataSource: IUser[] = []
+
+    cols = [
+        {field: 'action', header: 'Действие'},
+        {field: 'id', header: '№'},
+        {field: 'username', header: 'Логин'},
+        {field: 'password', header: 'Пароль'},
+        {field: 'firstname', header: 'Имя'},
+        {field: 'lastname', header: 'Фамилия'},
+        {field: 'address', header: 'Адрес'},
+        {field: 'phone', header: 'Номер'},
+        {field: 'email', header: 'Email'},
+    ];
 }
