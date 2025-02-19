@@ -3,13 +3,15 @@ import { IUser } from './model/user.model';
 import { Toolbar } from 'primeng/toolbar';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-users',
     imports: [
         Toolbar,
         Button,
-        TableModule
+        TableModule,
+        CommonModule
     ],
     templateUrl: './users.component.html',
     standalone: true,
