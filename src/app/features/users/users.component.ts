@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { IUser } from './model/user.model';
 import { Toolbar } from 'primeng/toolbar';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { UsersService } from './users.service';
+import { UserFormComponent } from './user-form/user-form.component';
 
 @Component({
     selector: 'app-users',
@@ -11,14 +13,16 @@ import { CommonModule } from '@angular/common';
         Toolbar,
         Button,
         TableModule,
-        CommonModule
+        CommonModule,
+        UserFormComponent
     ],
     templateUrl: './users.component.html',
     standalone: true,
     styleUrl: './users.component.scss'
 })
-export class UsersComponent {
-    dataSource: IUser[] = []
+export class UsersComponent implements OnInit {
+    isShowCreateDialog: WritableSignal<boolean> = signal(false);
+    dataSource: IUser[] = [];
 
     cols = [
         {field: 'action', header: 'Действие'},
@@ -31,4 +35,23 @@ export class UsersComponent {
         {field: 'phone', header: 'Номер'},
         {field: 'email', header: 'Email'},
     ];
+
+    constructor(
+        private readonly service: UsersService,
+    ) {
+
+    }
+
+    ngOnInit(): void {
+        this.initialize();
+    }
+
+    showUserCreateDialog() {
+        this.isShowCreateDialog.set(true);
+    }
+
+    initialize() {
+        this.service.getUsers()
+            .subscribe((res: any) => this.dataSource = res);
+    }
 }
