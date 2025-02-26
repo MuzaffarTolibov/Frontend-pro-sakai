@@ -1,8 +1,10 @@
 const DOMAIN = 'https://fakestoreapi.com/'
 
-interface env {
+export interface IEnv {
+    production: boolean,
     apiUrl: string;
 }
-export const environment: env = {
+export const environment: IEnv = {
+    production: false,
     apiUrl: DOMAIN,
 };

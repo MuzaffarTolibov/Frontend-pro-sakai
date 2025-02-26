@@ -50,6 +50,10 @@ export class UsersComponent implements OnInit {
         this.isShowCreateDialog.set(true);
     }
 
+    addUser(user: IUser): void {
+        this.dataSource.push(user);
+    }
+
     initialize() {
         this.service.getUsers()
             .subscribe((res: any) => this.dataSource = res);

@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IUser } from '../../test/model/user.model';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
+import { UsersService } from '../users.service';
+import { IUser } from '../model/user.model';
 
 @Component({
     selector: 'app-user-form',
@@ -27,6 +28,7 @@ export class UserFormComponent implements OnInit{
 
     constructor(
         private fb: FormBuilder,
+        private readonly service: UsersService
     ) {
     }
 
@@ -64,7 +66,15 @@ export class UserFormComponent implements OnInit{
     save() {
         if (this.form.invalid) return;
 
-        console.log(this.form.value);
+        const value = {...this.form.value};
+
+        this.service.createUser(value)
+            .subscribe(res => {
+                value.id = res.id;
+                this.create.emit(value)
+            })
+
+
         this.close.emit(false);
     }
 }

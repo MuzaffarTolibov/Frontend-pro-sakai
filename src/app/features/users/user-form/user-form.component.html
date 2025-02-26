@@ -46,7 +46,7 @@
     </ng-template>
 
     <ng-template #footer>
-        <p-button label="Cancel" icon="pi pi-times" text />
+        <p-button label="Cancel" icon="pi pi-times" text (click)="hideModal()" />
         <p-button (click)="save()" label="Save" icon="pi pi-check" />
     </ng-template>
 </p-dialog>

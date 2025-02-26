@@ -44,4 +44,5 @@
 <app-user-form
     [showCreateModal]="isShowCreateDialog()"
     (close)="isShowCreateDialog.set(false)"
+    (create)="addUser($event)"
 ></app-user-form>
