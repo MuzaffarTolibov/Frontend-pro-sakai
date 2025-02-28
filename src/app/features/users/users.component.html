@@ -25,7 +25,7 @@
         <ng-template pTemplate="body" let-user>
             <tr>
                 <td style="min-width:2rem; text-align: center;">
-                    <p-button icon="pi pi-pencil" severity="success" rounded />
+                    <p-button icon="pi pi-pencil" severity="success" rounded (click)="showUpdateDialog(user)" />
                 </td>
                 <td style="min-width:2rem; text-align: center;"> {{ user.id }}</td>
                 <td style="min-width:12rem;">{{ user.username }}</td>
@@ -43,6 +43,8 @@
 
 <app-user-form
     [showCreateModal]="isShowCreateDialog()"
+    [userItem]="currentUser"
     (close)="isShowCreateDialog.set(false)"
     (create)="addUser($event)"
+    (update)="updateUser($event)"
 ></app-user-form>

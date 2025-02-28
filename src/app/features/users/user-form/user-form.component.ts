@@ -5,6 +5,7 @@ import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { UsersService } from '../users.service';
 import { IUser } from '../model/user.model';
+import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 @Component({
     selector: 'app-user-form',
@@ -23,6 +24,7 @@ export class UserFormComponent implements OnInit{
     @Input() showCreateModal: boolean = false;
     @Output() close: EventEmitter<boolean> = new EventEmitter();
     @Output() create: EventEmitter<IUser> = new EventEmitter();
+    @Output() update: EventEmitter<IUser> = new EventEmitter();
 
     form!: FormGroup;
 
@@ -44,6 +46,7 @@ export class UserFormComponent implements OnInit{
 
     createForm() {
         this.form = this.fb.group({
+            id: [''],
             email: ['', [Validators.required, Validators.email]],
             username: ['', [Validators.required, Validators.minLength(4)]],
             password: ['', [Validators.required, Validators.minLength(4)]],
@@ -64,16 +67,23 @@ export class UserFormComponent implements OnInit{
     }
 
     save() {
-        if (this.form.invalid) return;
+        // if (this.form.invalid) return;
 
         const value = {...this.form.value};
 
-        this.service.createUser(value)
-            .subscribe(res => {
-                value.id = res.id;
-                this.create.emit(value)
-            })
-
+        if (value.id) {
+            this.service.update(value, value.id)
+                .subscribe((res: any) => {
+                    this.update.emit(res.user);
+                })
+        } else {
+            delete value.id;
+            this.service.createUser(value)
+                .subscribe(res => {
+                    value.id = res.id;
+                    this.create.emit(value)
+                })
+        }
 
         this.close.emit(false);
     }

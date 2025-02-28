@@ -22,6 +22,7 @@ import { UserFormComponent } from './user-form/user-form.component';
 })
 export class UsersComponent implements OnInit {
     isShowCreateDialog: WritableSignal<boolean> = signal(false);
+    currentUser: IUser;
     dataSource: IUser[] = [];
 
     cols = [
@@ -48,14 +49,27 @@ export class UsersComponent implements OnInit {
 
     showUserCreateDialog() {
         this.isShowCreateDialog.set(true);
+
+        // this.currentUser = null;
+    }
+
+    showUpdateDialog(user: IUser) {
+        this.isShowCreateDialog.set(true);
+
+        this.currentUser = user;
     }
 
     addUser(user: IUser): void {
         this.dataSource.push(user);
     }
 
+    updateUser(user: IUser) {
+        const index = this.dataSource.findIndex(item => item.id === user.id);
+        this.dataSource.splice(index, 1, user);
+    }
+
     initialize() {
         this.service.getUsers()
-            .subscribe((res: any) => this.dataSource = res);
+            .subscribe((res: any) => this.dataSource = res.users);
     }
 }

@@ -20,4 +20,8 @@ export class UsersService {
     createUser(user: IUser): Observable<IUser> {
       return this.http.post<IUser>(BASE_URL, user)
     }
+
+    update(user: IUser, id: number | string): Observable<IUser> {
+      return this.http.put<IUser>(`${BASE_URL}/${id}`, user)
+    }
 }
