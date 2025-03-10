@@ -24,4 +24,8 @@ export class UsersService {
     update(user: IUser, id: number | string): Observable<IUser> {
       return this.http.put<IUser>(`${BASE_URL}/${id}`, user)
     }
+
+    delete(id: string | number): Observable<IUser> {
+      return this.http.delete<IUser>(`${BASE_URL}/${id}`)
+    }
 }

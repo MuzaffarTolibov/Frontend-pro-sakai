@@ -2,10 +2,14 @@ import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { IUser } from './model/user.model';
 import { Toolbar } from 'primeng/toolbar';
 import { Button } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { UsersService } from './users.service';
 import { UserFormComponent } from './user-form/user-form.component';
+import { finalize } from 'rxjs';
+import { InputText } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 @Component({
     selector: 'app-users',
@@ -14,7 +18,10 @@ import { UserFormComponent } from './user-form/user-form.component';
         Button,
         TableModule,
         CommonModule,
-        UserFormComponent
+        UserFormComponent,
+        InputText,
+        IconField,
+        InputIcon
     ],
     templateUrl: './users.component.html',
     standalone: true,
@@ -22,6 +29,7 @@ import { UserFormComponent } from './user-form/user-form.component';
 })
 export class UsersComponent implements OnInit {
     isShowCreateDialog: WritableSignal<boolean> = signal(false);
+    loading: WritableSignal<boolean> = signal(false);
     currentUser: IUser;
     dataSource: IUser[] = [];
 
@@ -47,10 +55,19 @@ export class UsersComponent implements OnInit {
         this.initialize();
     }
 
+    hideModal() {
+        this.isShowCreateDialog.set(false)
+        this.currentUser = null;
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
+
     showUserCreateDialog() {
         this.isShowCreateDialog.set(true);
 
-        // this.currentUser = null;
+        this.currentUser = null;
     }
 
     showUpdateDialog(user: IUser) {
@@ -68,8 +85,26 @@ export class UsersComponent implements OnInit {
         this.dataSource.splice(index, 1, user);
     }
 
+    deleteUser(user: IUser) {
+        this.loading.set(true);
+
+        this.service.delete(user.id)
+            .pipe(
+                finalize(() => this.loading.set(false))
+            )
+            .subscribe((res: any) => {
+                if(res.status === "SUCCESS") {
+                    this.dataSource = this.dataSource.filter(item => item.id !== user.id);
+                }
+            })
+    }
+
     initialize() {
+        this.loading.set(true);
         this.service.getUsers()
+            .pipe(
+                finalize(() => this.loading.set(false))
+            )
             .subscribe((res: any) => this.dataSource = res.users);
     }
 }

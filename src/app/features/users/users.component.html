@@ -1,7 +1,9 @@
 <p-toolbar styleClass="mb-6">
     <ng-template #start>
-        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (click)="showUserCreateDialog()"/>
-        <!--        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined />-->
+        <div class="flex justify-between">
+            <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (click)="showUserCreateDialog()"/>
+            <input (input)="onGlobalFilter(dt, $event)" pInputText type="text" placeholder="Поиск">
+        </div>
     </ng-template>
 </p-toolbar>
 
@@ -13,8 +15,9 @@
              [lazy]="true"
              responsiveLayout="scroll"
              [showCurrentPageReport]="true"
-             [globalFilterFields]="['name', 'id']"
+             [globalFilterFields]="['username', 'password', 'id', 'name.firstName', 'name.lastName', 'phone']"
              [rowHover]="true"
+             [loading]="loading()"
              styleClass="p-datatable-gridlines"
              dataKey="id">
         <ng-template pTemplate="header">
@@ -24,8 +27,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-user>
             <tr>
-                <td style="min-width:2rem; text-align: center;">
+                <td style="min-width:2rem; text-align: center; display: flex">
                     <p-button icon="pi pi-pencil" severity="success" rounded (click)="showUpdateDialog(user)" />
+                    <p-button class="ml-2" icon="pi pi-trash" severity="danger" rounded (click)="deleteUser(user)" />
                 </td>
                 <td style="min-width:2rem; text-align: center;"> {{ user.id }}</td>
                 <td style="min-width:12rem;">{{ user.username }}</td>
@@ -44,7 +48,7 @@
 <app-user-form
     [showCreateModal]="isShowCreateDialog()"
     [userItem]="currentUser"
-    (close)="isShowCreateDialog.set(false)"
+    (close)="hideModal()"
     (create)="addUser($event)"
     (update)="updateUser($event)"
 ></app-user-form>

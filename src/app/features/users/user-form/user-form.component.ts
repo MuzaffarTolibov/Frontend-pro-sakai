@@ -67,7 +67,7 @@ export class UserFormComponent implements OnInit{
     }
 
     save() {
-        // if (this.form.invalid) return;
+        if (this.form.invalid) return;
 
         const value = {...this.form.value};
 
@@ -79,9 +79,8 @@ export class UserFormComponent implements OnInit{
         } else {
             delete value.id;
             this.service.createUser(value)
-                .subscribe(res => {
-                    value.id = res.id;
-                    this.create.emit(value)
+                .subscribe((res: any) => {
+                    this.create.emit(res.user)
                 })
         }
 
