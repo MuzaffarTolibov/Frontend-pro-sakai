@@ -7,6 +7,7 @@ import { IProduct, ProductCategoriesType } from './model/product.model';
 import { InputText } from 'primeng/inputtext';
 import { Toolbar } from 'primeng/toolbar';
 import { ProductsService } from './products.service';
+import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 @Component({
     selector: 'app-products',
@@ -24,6 +25,7 @@ import { ProductsService } from './products.service';
 })
 export class ProductsComponent implements OnInit{
     products: IProduct[] = [];
+    tvProd: any[] = [];
     productsTVCategory: WritableSignal<IProduct[]> = signal([]);
     productsAudioCategory: WritableSignal<IProduct[]> = signal([]);
     productsLaptopCategory: WritableSignal<IProduct[]> = signal([]);
@@ -57,6 +59,7 @@ export class ProductsComponent implements OnInit{
 
     ngOnInit() {
         this.initialize();
+        console.log(this.productsTVCategory());
     }
 
     getSeverity(status: string) {
@@ -77,12 +80,14 @@ export class ProductsComponent implements OnInit{
             .subscribe((res: any) => {
                 this.products = res.products;
 
-                this.productsTVCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.TV))
+                this.productsTVCategory.set(this.products.filter((item: IProduct) => item.category === ProductCategoriesType.TV))
                 this.productsAudioCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.Audio))
                 this.productsMobileCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.MOBILE))
                 this.productsGamingCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.GAMING))
                 this.productsLaptopCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.LAPTOP))
                 this.productsAppliancesCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.APPLIANCES))
+                this.tvProd = res.products.filter((item: IProduct) => item.category === ProductCategoriesType.Audio)
+                console.log(this.productsAudioCategory());
             })
     }
 }

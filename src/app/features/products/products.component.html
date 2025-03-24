@@ -10,7 +10,7 @@
     <div class="font-semibold text-xl mb-4">Products</div>
     <p-carousel [value]="products" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="carouselResponsiveOptions">
         <ng-template let-product #item>
-            <div class="border border-surface rounded-border m-2 p-4">
+            <div class="border border-surface rounded-border m-2 p-4 h-fit">
                 <div class="mb-4">
                     <div class="relative mx-auto">
                         <img src="{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
@@ -31,3 +31,81 @@
         </ng-template>
     </p-carousel>
 </div>
+
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Audio</div>
+    <p-carousel [value]="productsAudioCategory()" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="carouselResponsiveOptions">
+        <ng-template let-product #item>
+            <div class="border border-surface rounded-border m-2 p-4 h-fit">
+                <div class="mb-4">
+                    <div class="relative mx-auto">
+                        <img src="{{ product.image }}" [alt]="product.title" class="w-full rounded-border" />
+                        <div class="absolute bg-black/70 rounded-border" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }">
+                            <p-tag [value]="product.brand" />
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4 font-medium">{{ product.title }}</div>
+                <div class="flex justify-between items-center">
+                    <div class="mt-0 font-semibold text-xl">{{ '$' + product.price }}</div>
+                    <span>
+                        <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
+                        <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
+                    </span>
+                </div>
+            </div>
+        </ng-template>
+    </p-carousel>
+</div>
+
+<div class="card">
+    <div class="font-semibold text-xl mb-4">TV</div>
+    <p-carousel [value]="productsTVCategory()" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="carouselResponsiveOptions">
+        <ng-template let-product #item>
+            <div class="border border-surface rounded-border m-2 p-4 h-fit">
+                <div class="mb-4">
+                    <div class="relative mx-auto">
+                        <img src="{{ product.image }}" [alt]="product.title" class="w-full rounded-border" />
+                        <div class="absolute bg-black/70 rounded-border" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }">
+                            <p-tag [value]="product.brand" />
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4 font-medium">{{ product.title }}</div>
+                <div class="flex justify-between items-center">
+                    <div class="mt-0 font-semibold text-xl">{{ '$' + product.price }}</div>
+                    <span>
+                        <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
+                        <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
+                    </span>
+                </div>
+            </div>
+        </ng-template>
+    </p-carousel>
+</div>
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Laptop</div>
+    <p-carousel [value]="products" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="carouselResponsiveOptions">
+        @for (product of productsLaptopCategory(); track $index) {
+            <div class="border border-surface rounded-border m-2 p-4 h-fit">
+                <div class="mb-4">
+                    <div class="relative mx-auto">
+                        <img src="{{ product.image }}" [alt]="product.title" class="w-full rounded-border" />
+                        <div class="absolute bg-black/70 rounded-border" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }">
+                            <p-tag [value]="product.brand" />
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4 font-medium">{{ product.title }}</div>
+                <div class="flex justify-between items-center">
+                    <div class="mt-0 font-semibold text-xl">{{ '$' + product.price }}</div>
+                    <span>
+                        <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
+                        <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
+                    </span>
+                </div>
+            </div>
+        }
+    </p-carousel>
+</div>
+
