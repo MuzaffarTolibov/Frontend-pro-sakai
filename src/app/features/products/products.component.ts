@@ -7,7 +7,7 @@ import { IProduct, ProductCategoriesType } from './model/product.model';
 import { InputText } from 'primeng/inputtext';
 import { Toolbar } from 'primeng/toolbar';
 import { ProductsService } from './products.service';
-import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
+import { ProductFormComponent } from './product-form/product-form.component';
 
 @Component({
     selector: 'app-products',
@@ -17,7 +17,8 @@ import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
         Tag,
         CommonModule,
         InputText,
-        Toolbar
+        Toolbar,
+        ProductFormComponent
     ],
     templateUrl: './products.component.html',
     standalone: true,
@@ -33,6 +34,8 @@ export class ProductsComponent implements OnInit{
     productsGamingCategory: WritableSignal<IProduct[]> = signal([]);
     productsAppliancesCategory: WritableSignal<IProduct[]> = signal([]);
 
+    isShowCreateDialog: WritableSignal<boolean> = signal(false);
+    currentUser: IProduct;
 
     carouselResponsiveOptions: any[] = [
         {
@@ -59,7 +62,6 @@ export class ProductsComponent implements OnInit{
 
     ngOnInit() {
         this.initialize();
-        console.log(this.productsTVCategory());
     }
 
     getSeverity(status: string) {
@@ -75,6 +77,24 @@ export class ProductsComponent implements OnInit{
         }
     }
 
+    hideModal() {
+        this.isShowCreateDialog.set(false)
+        this.currentUser = null;
+    }
+
+    showCreateDialog() {
+        this.isShowCreateDialog.set(true);
+
+        this.currentUser = null;
+    }
+
+    showUpdateDialog(product: IProduct) {
+        this.isShowCreateDialog.set(true);
+
+        this.currentUser = product;
+    }
+
+
     initialize() {
         this.productService.getProducts()
             .subscribe((res: any) => {
@@ -87,7 +107,7 @@ export class ProductsComponent implements OnInit{
                 this.productsLaptopCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.LAPTOP))
                 this.productsAppliancesCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.APPLIANCES))
                 this.tvProd = res.products.filter((item: IProduct) => item.category === ProductCategoriesType.Audio)
-                console.log(this.productsAudioCategory());
+                console.log(this.productsGamingCategory());
             })
     }
 }

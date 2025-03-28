@@ -13,7 +13,7 @@ export interface IProduct {
 
 export enum ProductCategoriesType {
     Audio = 'audio',
-    TV = 'TV',
+    TV = 'tv',
     LAPTOP = 'laptop',
     MOBILE = 'mobile',
     GAMING = 'gaming',
