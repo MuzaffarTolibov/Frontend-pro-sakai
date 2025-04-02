@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Carousel } from 'primeng/carousel';
 import { Tag } from 'primeng/tag';
@@ -26,6 +26,9 @@ import { ProductFormComponent } from './product-form/product-form.component';
 })
 export class ProductsComponent implements OnInit{
     products: IProduct[] = [];
+    paymentProducts: IProduct[] = [];
+    productPaymentCount: any = [];
+
     tvProd: any[] = [];
     productsTVCategory: WritableSignal<IProduct[]> = signal([]);
     productsAudioCategory: WritableSignal<IProduct[]> = signal([]);
@@ -35,7 +38,8 @@ export class ProductsComponent implements OnInit{
     productsAppliancesCategory: WritableSignal<IProduct[]> = signal([]);
 
     isShowCreateDialog: WritableSignal<boolean> = signal(false);
-    currentUser: IProduct;
+    count: WritableSignal<number> = signal(0);
+    sumAllProducts: number = 0;
 
     carouselResponsiveOptions: any[] = [
         {
@@ -79,21 +83,50 @@ export class ProductsComponent implements OnInit{
 
     hideModal() {
         this.isShowCreateDialog.set(false)
-        this.currentUser = null;
     }
 
     showCreateDialog() {
-        this.isShowCreateDialog.set(true);
+        let productCount = {};
+        let productPrice = {};
 
-        this.currentUser = null;
+        this.paymentProducts.forEach(product => {
+            if(!productCount[product.model]) {
+                productCount[product.model] = 0;
+                productPrice[product.model] = product.price;
+            }
+            productCount[product.model]++;
+        })
+
+        Object.keys(productCount).forEach((product) => {
+            let totalCost = 0;
+            const quantity = productCount[product];
+            const price = productPrice[product];
+            totalCost += quantity * price;
+
+            this.productPaymentCount.push({
+                product,
+                quantity,
+                totalCost
+            })
+        })
+
+        this.sumAllProducts = this.paymentProducts.reduce((acc, item) => acc + item.price, 0);
+
+
+        this.isShowCreateDialog.set(true);
     }
 
     showUpdateDialog(product: IProduct) {
+
         this.isShowCreateDialog.set(true);
 
-        this.currentUser = product;
     }
 
+    addProductToPayment(product: IProduct) {
+        this.paymentProducts.push(product);
+
+        this.count.update(value => value + 1);
+    }
 
     initialize() {
         this.productService.getProducts()
@@ -107,7 +140,6 @@ export class ProductsComponent implements OnInit{
                 this.productsLaptopCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.LAPTOP))
                 this.productsAppliancesCategory.set(res.products.filter((item: IProduct) => item.category === ProductCategoriesType.APPLIANCES))
                 this.tvProd = res.products.filter((item: IProduct) => item.category === ProductCategoriesType.Audio)
-                console.log(this.productsGamingCategory());
             })
     }
 }

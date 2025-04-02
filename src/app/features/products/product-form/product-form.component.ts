@@ -22,6 +22,7 @@ import { IProduct } from '../model/product.model';
 export class ProductFormComponent implements OnInit {
     @Input() title: string | undefined;
     @Input() showCreateModal: boolean = false;
+    @Input() products: any = null;
     @Output() close: EventEmitter<boolean> = new EventEmitter();
     @Output() create: EventEmitter<IUser> = new EventEmitter();
     @Output() update: EventEmitter<IUser> = new EventEmitter();
