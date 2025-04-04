@@ -215,6 +215,8 @@
 <app-product-form
     [showCreateModal]="isShowCreateDialog()"
     [products]="productPaymentCount"
+    [sumAllProducts]="sumAllProducts"
     (close)="hideModal()"
+    (payment)="payProduct()"
 ></app-product-form>
 

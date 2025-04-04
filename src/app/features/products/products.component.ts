@@ -82,7 +82,13 @@ export class ProductsComponent implements OnInit{
     }
 
     hideModal() {
-        this.isShowCreateDialog.set(false)
+        this.isShowCreateDialog.set(false);
+        this.productPaymentCount = [];
+    }
+
+    payProduct() {
+        this.isShowCreateDialog.set(false);
+        this.productPaymentCount = [];
     }
 
     showCreateDialog() {

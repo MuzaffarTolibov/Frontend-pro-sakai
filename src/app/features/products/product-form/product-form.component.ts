@@ -6,6 +6,9 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { IProduct } from '../model/product.model';
+import { JsonPipe, NgForOf } from '@angular/common';
+import { PrimeTemplate } from 'primeng/api';
+import { TableModule } from 'primeng/table';
 
 @Component({
     selector: 'app-product-form',
@@ -13,78 +16,43 @@ import { IProduct } from '../model/product.model';
         Dialog,
         ReactiveFormsModule,
         InputText,
-        Button
+        Button,
+        JsonPipe,
+        NgForOf,
+        PrimeTemplate,
+        TableModule
     ],
     templateUrl: './product-form.component.html',
     standalone: true,
     styleUrl: './product-form.component.scss'
 })
-export class ProductFormComponent implements OnInit {
+export class ProductFormComponent {
     @Input() title: string | undefined;
     @Input() showCreateModal: boolean = false;
     @Input() products: any = null;
+    @Input() sumAllProducts: number = 0;
     @Output() close: EventEmitter<boolean> = new EventEmitter();
-    @Output() create: EventEmitter<IUser> = new EventEmitter();
-    @Output() update: EventEmitter<IUser> = new EventEmitter();
+    @Output() payment: EventEmitter<boolean> = new EventEmitter();
 
     form!: FormGroup;
 
+    cols = [
+        {field: 'product', header: 'Прадукт'},
+        {field: 'quantity', header: 'Количество'},
+        {field: 'totalCost', header: 'Цена'},
+    ];
+
     constructor(
         private fb: FormBuilder,
-        private readonly service: UsersService
     ) {
-    }
-
-    @Input() set productItem(item: IProduct) {
-        if (item) {
-            this.form.patchValue(item);
-        }
-    }
-
-    ngOnInit() {
-        this.createForm();
-    }
-
-    createForm() {
-        this.form = this.fb.group({
-            id: [''],
-            email: ['', [Validators.required, Validators.email]],
-            username: ['', [Validators.required, Validators.minLength(4)]],
-            password: ['', [Validators.required, Validators.minLength(4)]],
-            name: this.fb.group({
-                firstname: ['', [Validators.required]],
-                lastname: ['', [Validators.required]],
-            }),
-            address: this.fb.group({
-                city: ['', [Validators.required]],
-            }),
-            phone: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(12)]],
-        })
     }
 
     hideModal(): void {
         this.close.emit(false);
-        this.form.reset();
     }
 
-    save() {
-        if (this.form.invalid) return;
-
-        const value = {...this.form.value};
-
-        if (value.id) {
-            this.service.update(value, value.id)
-                .subscribe((res: any) => {
-                    this.update.emit(res.user);
-                })
-        } else {
-            delete value.id;
-            this.service.createUser(value)
-                .subscribe((res: any) => {
-                    this.create.emit(res.user)
-                })
-        }
-
-        this.close.emit(false);
+    payProduct() {
+        this.products = null;
+        this.payment.emit(true);
     }
 }
