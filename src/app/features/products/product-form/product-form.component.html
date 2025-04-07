@@ -1,6 +1,6 @@
 <p-dialog [(visible)]="showCreateModal" [style]="{ width: '450px' }" header="Добавить нового пользователя" [modal]="true" (onHide)="hideModal()">
     <ng-template #content>
-        <p-table #dt [value]="products"
+        <p-table #dt [value]="prod()"
                  [columns]="cols"
                  [lazy]="true"
                  responsiveLayout="scroll"
@@ -31,6 +31,6 @@
 
     <ng-template #footer>
         <p-button label="Cancel" icon="pi pi-times" text (click)="hideModal()" />
-        <p-button label="Pay" (click)="payProduct()" icon="pi pi-check" />
+        <p-button label="Pay" (click)="payProduct()" icon="pi pi-check" [disabled]="isPayed()"/>
     </ng-template>
 </p-dialog>

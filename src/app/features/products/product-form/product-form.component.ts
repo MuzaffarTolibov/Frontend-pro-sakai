@@ -1,14 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IUser } from '../../users/model/user.model';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UsersService } from '../../users/users.service';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    OnInit,
+    Output,
+    signal,
+    ViewChild,
+    WritableSignal
+} from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
-import { IProduct } from '../model/product.model';
 import { JsonPipe, NgForOf } from '@angular/common';
-import { PrimeTemplate } from 'primeng/api';
-import { TableModule } from 'primeng/table';
+import { MessageService, PrimeTemplate } from 'primeng/api';
+import { Table, TableModule } from 'primeng/table';
 
 @Component({
     selector: 'app-product-form',
@@ -24,9 +31,11 @@ import { TableModule } from 'primeng/table';
     ],
     templateUrl: './product-form.component.html',
     standalone: true,
-    styleUrl: './product-form.component.scss'
+    styleUrl: './product-form.component.scss',
+    providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductFormComponent {
+export class ProductFormComponent implements OnInit{
     @Input() title: string | undefined;
     @Input() showCreateModal: boolean = false;
     @Input() products: any = null;
@@ -34,17 +43,31 @@ export class ProductFormComponent {
     @Output() close: EventEmitter<boolean> = new EventEmitter();
     @Output() payment: EventEmitter<boolean> = new EventEmitter();
 
+    isPayed: WritableSignal<boolean> = signal(true);
+
+    prod: WritableSignal<any> = signal([]);
+
+    @ViewChild('dt') table: Table;
     form!: FormGroup;
 
     cols = [
-        {field: 'product', header: 'Прадукт'},
-        {field: 'quantity', header: 'Количество'},
-        {field: 'totalCost', header: 'Цена'},
+        { field: 'product', header: 'Прадукт' },
+        { field: 'quantity', header: 'Количество' },
+        { field: 'totalCost', header: 'Цена' }
     ];
 
     constructor(
         private fb: FormBuilder,
+        private messageService: MessageService,
     ) {
+
+    }
+
+    ngOnInit() {
+        this.prod.set(this.products);
+        if(this.products.length) {
+            this.isPayed.set(false);
+        }
     }
 
     hideModal(): void {
@@ -52,7 +75,9 @@ export class ProductFormComponent {
     }
 
     payProduct() {
-        this.products = null;
+        this.products = [];
+        this.prod.set([]);
+        this.table.reset();
         this.payment.emit(true);
     }
 }

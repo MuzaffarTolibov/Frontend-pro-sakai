@@ -8,6 +8,9 @@ import { InputText } from 'primeng/inputtext';
 import { Toolbar } from 'primeng/toolbar';
 import { ProductsService } from './products.service';
 import { ProductFormComponent } from './product-form/product-form.component';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
 
 @Component({
     selector: 'app-products',
@@ -18,13 +21,17 @@ import { ProductFormComponent } from './product-form/product-form.component';
         CommonModule,
         InputText,
         Toolbar,
-        ProductFormComponent
+        ProductFormComponent,
+        ToastModule,
+        MessageModule
     ],
     templateUrl: './products.component.html',
     standalone: true,
-    styleUrl: './products.component.scss'
+    styleUrl: './products.component.scss',
+    providers: [MessageService, ProductsService]
 })
 export class ProductsComponent implements OnInit{
+    msgs: ToastMessageOptions[] | null = [];
     products: IProduct[] = [];
     paymentProducts: IProduct[] = [];
     productPaymentCount: any = [];
@@ -61,6 +68,7 @@ export class ProductsComponent implements OnInit{
 
     constructor(
         private readonly productService: ProductsService,
+        private readonly messageService: MessageService
     ) {
     }
 
@@ -88,7 +96,10 @@ export class ProductsComponent implements OnInit{
 
     payProduct() {
         this.isShowCreateDialog.set(false);
+        this.count.set(0);
         this.productPaymentCount = [];
+        this.paymentProducts = [];
+        this.messageService.add({ severity: 'success', summary: 'Success Message', detail: 'Success payed products' });
     }
 
     showCreateDialog() {

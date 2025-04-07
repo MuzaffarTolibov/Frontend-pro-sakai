@@ -212,7 +212,7 @@
     }
 </div>
 
-<app-product-form
+<app-product-form *ngIf="isShowCreateDialog()"
     [showCreateModal]="isShowCreateDialog()"
     [products]="productPaymentCount"
     [sumAllProducts]="sumAllProducts"
@@ -220,3 +220,4 @@
     (payment)="payProduct()"
 ></app-product-form>
 
+<p-toast />
