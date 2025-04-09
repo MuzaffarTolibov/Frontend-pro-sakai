@@ -24,4 +24,18 @@ export class TokenService {
         return this._refresh_token;
     }
 
+    setTokens(meta: any) {
+        this._access_token = meta.access_token;
+        this._refresh_token = meta.refresh_token;
+        localStorage.setItem('access_token', this._access_token);
+        localStorage.setItem('refresh_token', this._refresh_token);
+        this.refreshedToken$.next(true);
+    }
+
+    clearTokens() {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        this._access_token = null;
+        this._refresh_token = null;
+    }
 }

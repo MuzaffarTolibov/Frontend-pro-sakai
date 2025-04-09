@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef } from '@angular/core';
 import { Password } from 'primeng/password';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
@@ -6,6 +6,11 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Message } from 'primeng/message';
 import { NgClass } from '@angular/common';
+import { TokenService } from '../../core/services/token.service';
+import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-login',
@@ -24,7 +29,10 @@ import { NgClass } from '@angular/common';
 })
 export class LoginComponent {
     form = new FormGroup({
-        login: new FormControl('', [Validators.required, Validators.minLength(4)]),
+        email: new FormControl('', [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.email]),
         password: new FormControl('', [Validators.required, Validators.minLength(4)]),
     })
 
@@ -34,7 +42,12 @@ export class LoginComponent {
 
     submitted: boolean = false;
 
-    constructor() {
+    constructor(
+        private readonly tokenService: TokenService,
+        private readonly service: AuthService,
+        private readonly router: Router,
+        private readonly destroyRef: DestroyRef
+    ) {
     }
 
     inInvalid(field: string): boolean {
@@ -50,5 +63,27 @@ export class LoginComponent {
         }
 
         this.loading = true;
+
+        this.service.login(this.form.value)
+            .pipe(
+                finalize(() => this.loading = false),
+                takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe({
+                next: (res: any) => {
+                    if (res.access_token) {
+                        this.tokenService.setTokens(res)
+                        this.router.navigateByUrl('/').catch()
+                    } else {
+                        this.form.setErrors({login: true, password: true})
+                    }
+                },
+                error: err => {
+                    if (err.statusCode === 401) {
+                        this.invalidPasswordOrLogin = true;
+                    }
+                    console.log(err);
+                }
+            })
     }
 }

@@ -1,5 +1,5 @@
 const DOMAIN = 'https://fakestoreapi.in/api'
-const AUTH_API = 'https://api.escuelajs.co/api/v1/'
+const AUTH_API = 'https://api.escuelajs.co/api/v1'
 
 interface IEnvironment {
     production: boolean
