@@ -25,14 +25,41 @@
                     <span class="text-muted-color font-medium">Sign in to continue</span>
                 </div>
 
+                <p-message styleClass="mb-5 w-full"
+                           *ngIf="invalidPasswordOrLogin"
+                           severity="error" text="Введен неверный логин или пароль!"
+                ></p-message>
+
                 <form [formGroup]="form">
                     <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                    <input formControlName="login" pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" />
+                    <input
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted && inInvalid('login')}"
+                        formControlName="login"
+                        pInputText
+                        id="email1"
+                        type="text"
+                        placeholder="Email address"
+                        class="w-full md:w-[30rem] mb-8"
+                    />
 
                     <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                    <p-password formControlName="password" id="password1" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                    <p-password
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted && inInvalid('password')}"
+                        formControlName="password"
+                        id="password1"
+                        placeholder="Password"
+                        [toggleMask]="true"
+                        styleClass="mb-4"
+                        [fluid]="true"
+                        [feedback]="false"
+                    ></p-password>
 
-                    <p-button label="Sign In" styleClass="w-full"></p-button>
+                    <p-button
+                        label="Sign In" styleClass="w-full"
+                        [loading]="loading"
+                        [disabled]="form.invalid"
+                        (click)="login()"
+                    ></p-button>
                 </form>
             </div>
         </div>
