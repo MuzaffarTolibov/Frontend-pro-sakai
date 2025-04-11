@@ -5,7 +5,7 @@ import { InputText } from 'primeng/inputtext';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Message } from 'primeng/message';
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { TokenService } from '../../core/services/token.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
@@ -21,7 +21,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         InputText,
         ReactiveFormsModule,
         Message,
-        NgClass
+        NgClass,
+        NgIf
     ],
     templateUrl: './login.component.html',
     standalone: true,
