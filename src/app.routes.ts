@@ -5,6 +5,7 @@ import { Documentation } from './app/pages/documentation/documentation';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { LoginComponent } from './app/features/login/login.component';
+import { authGuard } from './app/core/guards/auth.guard';
 
 export const appRoutes: Routes = [
     {
@@ -16,7 +17,8 @@ export const appRoutes: Routes = [
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
             { path: 'my-pages', loadChildren: () => import('./app/features/features.routes') }
-        ]
+        ],
+        canActivate: [authGuard]
     },
     { path: 'login', component: LoginComponent },
     { path: 'landing', component: Landing },
