@@ -10,6 +10,7 @@ import { finalize } from 'rxjs';
 import { InputText } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { Product } from '../../pages/service/product.service';
 
 @Component({
     selector: 'app-users',
@@ -32,6 +33,9 @@ export class UsersComponent implements OnInit {
     loading: WritableSignal<boolean> = signal(false);
     currentUser: IUser;
     dataSource: IUser[] = [];
+
+    selectedProducts!: IUser[] | null;
+
 
     cols = [
         {field: 'action', header: 'Действие'},

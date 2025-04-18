@@ -10,16 +10,22 @@
 
 <div class="card">
     <div class="font-semibold text-xl mb-4">Users</div>
-    <p-table #dt [value]="dataSource"
-             [columns]="cols"
-             [lazy]="true"
-             responsiveLayout="scroll"
-             [showCurrentPageReport]="true"
-             [globalFilterFields]="['username', 'password', 'id', 'name.firstName', 'name.lastName', 'phone']"
-             [rowHover]="true"
-             [loading]="loading()"
-             styleClass="p-datatable-gridlines"
-             dataKey="id">
+    <p-table
+        #dt
+        [value]="dataSource"
+        [rows]="10"
+        [columns]="cols"
+        [paginator]="true"
+        [loading]="loading()"
+        [globalFilterFields]="['username', 'country.name', 'representative.name', 'status']"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        [(selection)]="selectedProducts"
+        [rowHover]="true"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+        [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10, 20, 30]"
+    >
         <ng-template pTemplate="header">
             <tr>
                 <th *ngFor="let col of cols">{{ col.header }}</th>
